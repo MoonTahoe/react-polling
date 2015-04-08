@@ -1,0 +1,38 @@
+{
+  "name": "react-polling",
+  "version": "0.0.1",
+  "description": "A socket io live polling application",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --recursive",
+    "prestart": "grunt",
+    "start": "node app.js",
+    "predev": "grunt",
+    "dev": "grunt watch & node-dev app.js"
+  },
+  "keywords": [
+    "polling",
+    "polls",
+    "audience",
+    "speaker",
+    "socket.io",
+    "react",
+    "tutorial"
+  ],
+  "author": "Alex Banks <alex@moonhighway.com> (http://www.moonhighway.com)",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.12.3",
+    "react": "^0.13.1",
+    "socket.io": "^1.3.5"
+  },
+  "devDependencies": {
+    "6to5ify": "^4.1.1",
+    "browserify": "^9.0.7",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "mocha": "^2.2.3",
+    "reactify": "^1.1.0"
+  }
+}
