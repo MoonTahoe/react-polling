@@ -1,11 +1,99 @@
-@import "../bower_components/bootstrap/less/bootstrap.less";
-
-@primary_color: red;
-
-body {
-  background-color: @primary_color;
-}
+@import "../node_modules/bootstrap/less/bootstrap.less";
 
 div#target {
   .container;
+}
+
+header {
+
+  .make-row();
+
+  h1 {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  >:first-child {
+    .make-xs-column(12);
+    .make-sm-column(5);
+  }
+
+  >:nth-child(2) {
+    .make-xs-column(6);
+    .make-sm-column(3);
+    padding: 18px;
+  }
+
+  >:last-child {
+    .make-xs-column(6);
+    .make-sm-column(1);
+    padding: 18px;
+    span {
+      height: 35px;
+      width: 35px;
+      border-radius: 50%;
+      padding: 0;
+      margin: 20px;
+      cursor: pointer;
+      display: block;
+    }
+  }
+
+}
+
+.disconnected {
+  background-color: @state-danger-text;
+}
+
+.connected {
+  background-color: @state-success-text;
+}
+
+.ping {
+  background-color: @state-danger-bg;
+  color: @state-danger-text;
+}
+
+#questions {
+
+  >div {
+    color: @state-success-text;
+  }
+
+  >div {
+    >span {
+      padding: .5em;
+      margin: .5em;
+      border: solid 2px ;
+      display: block;
+      cursor: pointer;
+
+      &:hover {
+        background-color: @state-success-text;
+        color: @state-success-bg;
+      }
+
+      .selected {
+        color: @state-success-text;
+        background-color: @state-success-bg;
+
+        &:hover {
+          background-color: @state-warning-bg;
+          color: @state-warning-text;
+        }
+
+      }
+
+    }
+  }
+
+}
+
+#questions>div>span.selected,
+#questions>div>span.selected:hover {
+  color: #326C32;
+}
+
+#questions>div>span.selected {
+  background-color: yellow;
 }

@@ -1,3 +1,6 @@
+dist/css/
+dist/js/
+
 .idea/
 bower_components/
 
