@@ -1,7 +1,6 @@
 module.exports = function (grunt) {
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
         less: {
             production: {
                 options: {
@@ -24,7 +23,7 @@ module.exports = function (grunt) {
                 src: [
                     "views/*.js",
                     "views/**/*.js",
-                    "client-main.js"
+                    "app-client.js"
                 ],
                 dest: 'dist/js/main.js'
             }
@@ -33,7 +32,8 @@ module.exports = function (grunt) {
             scripts: {
                 files: [
                     "views/*.js",
-                    "views/**/*.js"
+                    "views/**/*.js",
+                    "app-client.js"
                 ],
                 tasks: ['browserify'],
                 options: {
