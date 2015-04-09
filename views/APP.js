@@ -1,4 +1,6 @@
 var React = require('react');
+var Router = require('react-router');
+var { RouteHandler, Link } = Router;
 var $ = require('jquery');
 var Header = require('./Header');
 var io = require('socket.io-client');
@@ -51,6 +53,7 @@ var APP = React.createClass({
                 speaker={this.state.speaker.name}
                 audience={this.state.audience.length}
                 member={this.state.member.name} />
+            <RouteHandler />
         </div>
     }
 });
