@@ -24,9 +24,12 @@ Joining as Audience Member
     * *~~Home : Placeholder~~*
     * *~~Speaker : Placeholder~~*
     * *~~Score Graph : Placeholder~~*
-* Audience Form CSS and Validation
-* Join Button Click
-* Join Socket Complete
+* *~~Audience Form CSS and Validation~~*
+* *~~Join Button Click~~*
+* *~~Join Socket Complete~~*
+* *~~Show Welcome View for joined audience member~~*
+* *~~Auto Join Members on Refreshed Instance~~*
+* *~~Ask Internet about setting child props from state~~*
 
 Joining as Speaker
 ------------------
@@ -77,6 +80,7 @@ Deliver
 
 Enhance
 -------
+* Deal with Auto-rejoin Join form flicker (Fade-In)
 * Better Bootstrap those components
 * Display audience count component on speaker question
 * When all questions are answered grey out speaker question

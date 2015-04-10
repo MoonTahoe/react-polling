@@ -1,0 +1,36 @@
+@import "global.less";
+
+#questions {
+
+  >div {
+    color: @state-success-text;
+  }
+
+  >div {
+    >span {
+      padding: .5em;
+      margin: .5em;
+      border: solid 2px ;
+      display: block;
+      cursor: pointer;
+
+      &:hover {
+        background-color: @state-success-text;
+        color: @state-success-bg;
+      }
+
+      .selected {
+        color: @state-success-text;
+        background-color: @state-success-bg;
+
+        &:hover {
+          background-color: @state-warning-bg;
+          color: @state-warning-text;
+        }
+
+      }
+
+    }
+  }
+
+}

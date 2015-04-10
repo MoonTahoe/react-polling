@@ -1,0 +1,38 @@
+@import "global.less";
+
+header {
+
+  .make-row();
+
+  h1 {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  >:first-child {
+    .make-xs-column(12);
+    .make-sm-column(5);
+  }
+
+  >:nth-child(2) {
+    .make-xs-column(6);
+    .make-sm-column(3);
+    padding: 18px;
+  }
+
+  >:last-child {
+    .make-xs-column(6);
+    .make-sm-column(1);
+    padding: 18px;
+    span {
+      height: 35px;
+      width: 35px;
+      border-radius: 50%;
+      padding: 0;
+      margin: 20px;
+      cursor: pointer;
+      display: block;
+    }
+  }
+
+}

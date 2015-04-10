@@ -15,18 +15,50 @@ var APP = React.createClass({
                 id: ''
             },
             member: {
-                name: 'doug dougson',
+                name: '',
                 id: ''
-            }
+            },
+            title: 'Audience Polling',
+            connected: false
         };
     },
 
+    componentWillMount() {
+        this.socket = io('http://localhost:3000');
+        this.socket.on('connect', this.connect);
+        this.socket.on('disconnect', this.disconnect);
+        this.socket.on('serverState', this.serverState);
+        this.socket.on('audience', this.audienceUpdate);
+        this.socket.on('member:joined', this.joined);
+    },
+
+    emit(event, payload) {
+        this.socket.emit(event, payload);
+    },
+
     connect() {
-        this.refs.header.setState({ connected: true, title: 'Audience Polling' });
+        this.setState({ connected: true, title: 'Audience Polling' });
+        var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
+        if (member && member.type === 'audience') {
+            this.emit('audience:join', member);
+        }
+    },
+
+    serverState(state) {
+        this.setState(state);
+    },
+
+    joined(data) {
+        sessionStorage.member = JSON.stringify(data);
+        this.setState({ member: data });
+    },
+
+    audienceUpdate(audience) {
+        this.setState({ audience: audience });
     },
 
     disconnect() {
-        this.refs.header.setState({ connected: false, title: 'disconnected' });
+        this.setState({ connected: false, title: 'disconnected' });
         this.setState({
             audience: [],
             speaker: {},
@@ -37,23 +69,10 @@ var APP = React.createClass({
         });
     },
 
-    componentWillMount() {
-        $.getJSON('/state', result => this.setState(result));
-    },
-
-    componentDidMount() {
-        var socket = io('http://localhost:3000');
-        socket.on('connect', this.connect);
-        socket.on('disconnect', this.disconnect);
-    },
-
     render() {
         return <div>
-            <Header ref="header"
-                speaker={this.state.speaker.name}
-                audience={this.state.audience.length}
-                member={this.state.member.name} />
-            <RouteHandler />
+            <Header {...this.state} />
+            <RouteHandler emit={this.emit} {...this.state} />
         </div>
     }
 });
