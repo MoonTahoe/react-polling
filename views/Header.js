@@ -17,7 +17,7 @@ var Header = React.createClass({
     render: function() {
         return <header>
             <div>
-                <h1>{this.props.title}</h1>
+                <h1>{this.props.speaker.title}</h1>
                 <span style={this.showSpeaker()}>speaker: {this.props.speaker.name}</span>
             </div>
             <div>

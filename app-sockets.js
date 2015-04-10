@@ -5,14 +5,21 @@ var state = {
     audience: [],
     speaker: {
         name: '',
-        id: ''
+        id: '',
+        title: 'Presentation'
     },
     connections: []
 };
 
 function getMemberBySocketId(id) {
     return state.audience.filter(function (member) {
-        return member.socketid === id;
+        return member.id === id;
+    })[0];
+}
+
+function getSocketById(id) {
+    return state.connections.filter(function (cnx) {
+        return id === cnx.id;
     })[0];
 }
 
@@ -21,22 +28,56 @@ module.exports = function (io) {
     io.sockets.on('connection', function (socket) {
 
         socket.once('disconnect', function () {
-            var member = getMemberBySocketId(socket.id);
-            state.audience.splice(state.audience.indexOf(member), 1);
-            if (member) {
-                socket.server.sockets.emit("audience", state.audience);
-                console.log(colors.yellow("Left: " + member.name + " remaining. (" + state.audience.length + ") "));
+            if (socket.id === state.speaker.id) {
+                console.log(colors.magenta("Presentation Ended: " + state.speaker.title + " by " + state.speaker.name));
+                state.speaker = {
+                    name: '',
+                    id: '',
+                    title: 'Presentation'
+                };
+                socket.server.sockets.emit("presentation:end", state.speaker);
+            } else {
+                var member = getMemberBySocketId(socket.id);
+                state.audience.splice(state.audience.indexOf(member), 1);
+                if (member) {
+                    socket.server.sockets.emit("audience", state.audience);
+                    console.log(colors.yellow("Left: " + member.name + " remaining. (" + state.audience.length + ") "));
+                }
             }
             state.connections.splice(state.connections.indexOf(socket), 1);
             console.log(colors.red("Disconnected: " + state.connections.length + " remaining. (" + socket.id + ") "));
             socket.disconnect();
         });
 
+        socket.on('ping', function (id) {
+            var member = getMemberBySocketId(id);
+            var targetSocket = getSocketById(id);
+            if (targetSocket && member) {
+                targetSocket.emit('ping', socket.id);
+                console.log(colors.cyan('Ping: ' + member.name + ' (' + id + ')'));
+            }
+        });
+
+        socket.on('speaker:join', function (payload) {
+            state.speaker.name = payload.name;
+            state.speaker.id = socket.id;
+            state.speaker.title = payload.title;
+            this.emit('member:joined', {type: 'speaker', name: payload.name, title: payload.title});
+
+            //
+            //  TODO: Setup Questions
+            //
+
+            //this.emit('questions', questions);
+            this.server.sockets.emit('presentation:start', state.speaker);
+            console.log(colors.magenta("Presentation Started: " + payload.title + " by " + payload.name));
+        });
+
         socket.on('audience:join', function (payload) {
-            state.audience.push({name: payload.name, socketid: socket.id});
-            this.emit("member:joined", {type: 'audience', name: payload.name});
+            state.audience.push({name: payload.name, id: socket.id});
+            this.emit("member:joined", {type: 'audience', name: payload.name, id: socket.id });
             this.server.sockets.emit('audience', state.audience);
-            console.log(colors.blue('Audience Joined: ' + payload.name + ' (' + state.audience.length + ')'));
+            console.log(colors.yellow('Audience Joined: ' + payload.name + ' (' + state.audience.length + ')'));
         });
 
         state.connections.push(socket);

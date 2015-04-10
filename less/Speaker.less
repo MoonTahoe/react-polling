@@ -1,36 +1,78 @@
 @import "global.less";
 
-#questions {
+#Speaker {
 
-  >div {
-    color: @state-success-text;
-  }
+  table {
+    .table;
+    .table-striped;
+    .make-xs-column(12);
 
-  >div {
-    >span {
-      padding: .5em;
-      margin: .5em;
-      border: solid 2px ;
-      display: block;
-      cursor: pointer;
+    tbody, thead {
 
-      &:hover {
-        background-color: @state-success-text;
-        color: @state-success-bg;
-      }
+      tr {
+        .make-row();
+        td, th {
+          &:first-child {
+            .make-xs-column(1);
+          }
 
-      .selected {
-        color: @state-success-text;
-        background-color: @state-success-bg;
+          &:nth-child(2) {
+            .make-xs-column(5)
+          }
 
-        &:hover {
-          background-color: @state-warning-bg;
-          color: @state-warning-text;
+          &:last-child {
+            .make-xs-column(6);
+            font-size: 1em;
+            color: @greyedout;
+          }
+        }
+
+        td {
+          font-size: 1.7em;
         }
 
       }
 
     }
+
+  }
+
+
+
+  #questions {
+
+    >div {
+      color: @state-success-text;
+    }
+
+    >div {
+      >span {
+        padding: .5em;
+        margin: .5em;
+        border: solid 2px ;
+        display: block;
+        cursor: pointer;
+
+        &:hover {
+          background-color: @state-success-text;
+          color: @state-success-bg;
+        }
+
+        .selected {
+          color: @state-success-text;
+          background-color: @state-success-bg;
+
+          &:hover {
+            background-color: @state-warning-bg;
+            color: @state-warning-text;
+          }
+
+        }
+
+      }
+    }
+
   }
 
 }
+

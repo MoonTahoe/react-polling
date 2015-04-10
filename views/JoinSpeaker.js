@@ -1,12 +1,11 @@
 var React = require('react');
-var Link = require('react-router').Link;
-var Display = require('./Display');
 
-var Join = React.createClass({
+var JoinSpeaker = React.createClass({
 
     join() {
-        var fullName = this.refs.fname.getDOMNode().value + " " + this.refs.lname.getDOMNode().value;
-        this.props.emit('audience:join', { name: fullName });
+        var fullName = this.refs.fname.getDOMNode().value + " " + this.refs.lname.getDOMNode().value,
+            title = this.refs.title.getDOMNode().value;
+        this.props.emit('speaker:join', { name: fullName, title: title });
     },
 
     componentDidMount() {
@@ -22,14 +21,14 @@ var Join = React.createClass({
             <label>Last name</label>
             <input ref="lname" placeholder="enter your last name..." required />
 
-            <button>Join</button>
+            <label>Presentation Title</label>
+            <input ref="title" placeholder="enter a title..." required />
 
-            <Display if={!this.props.speaker.name}>
-                <Link to="/speaker">Join as speaker...</Link>
-            </Display>
+            <button>Join</button>
 
         </form>
     }
+
 });
 
-module.exports = Join;
+module.exports = JoinSpeaker;

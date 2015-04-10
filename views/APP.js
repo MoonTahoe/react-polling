@@ -12,13 +12,13 @@ var APP = React.createClass({
             audience: [],
             speaker: {
                 name: '',
-                id: ''
+                id: '',
+                title: ''
             },
             member: {
                 name: '',
                 id: ''
             },
-            title: 'Audience Polling',
             connected: false
         };
     },
@@ -29,7 +29,10 @@ var APP = React.createClass({
         this.socket.on('disconnect', this.disconnect);
         this.socket.on('serverState', this.serverState);
         this.socket.on('audience', this.audienceUpdate);
+        this.socket.on('presentation:start', this.start);
+        this.socket.on('presentation:end', this.end);
         this.socket.on('member:joined', this.joined);
+        this.socket.on('ping', this.ping);
     },
 
     emit(event, payload) {
@@ -37,10 +40,12 @@ var APP = React.createClass({
     },
 
     connect() {
-        this.setState({ connected: true, title: 'Audience Polling' });
+        this.setState({ connected: true });
         var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
         if (member && member.type === 'audience') {
             this.emit('audience:join', member);
+        } else if (member && member.type === 'speaker') {
+            this.emit('speaker:join', member);
         }
     },
 
@@ -53,6 +58,20 @@ var APP = React.createClass({
         this.setState({ member: data });
     },
 
+    start(speaker) {
+        this.setState({ speaker: speaker });
+    },
+
+    ping() {
+        $('body').addClass('ping');
+        alert("Hey, " + this.state.member.name + " PAY ATTENTION!!");
+        $('body').removeClass('ping');
+    },
+
+    end(speaker) {
+        this.setState({ speaker: speaker });
+    },
+
     audienceUpdate(audience) {
         this.setState({ audience: audience });
     },
@@ -61,7 +80,7 @@ var APP = React.createClass({
         this.setState({ connected: false, title: 'disconnected' });
         this.setState({
             audience: [],
-            speaker: {},
+            speaker: { title: 'Disconnected' },
             member: {
                 name: '',
                 id: ''

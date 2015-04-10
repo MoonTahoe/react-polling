@@ -33,20 +33,20 @@ Joining as Audience Member
 
 Joining as Speaker
 ------------------
-* Join as speaker link on audience
-* Speaker form with title filed CSS
-* Join as speaker
-* Emit and Handle Speaker Details (name, title)
-    * Display Name and Title
-    * Hide Speaker Link
-* Handle Speaker Disconnect
+* *~~Join as speaker link on audience~~*
+* *~~Speaker form with title filed CSS~~*
+* *~~Join as speaker~~*
+* *~~Emit and Handle Speaker Details (name, title)~~*
+    * *~~Display Name and Title~~*
+    * *~~Hide Speaker Link~~*
+* *~~Handle Speaker Disconnect~~*
 
 Attendance and Pinging
 -----------------------
-* Add Attendance Table
-* Link to Audience Connections and Disconnections
-* Add Ping Button and Style
-* Ping Audience Member
+* *~~Add Attendance Table~~*
+* *~~Link to Audience Connections and Disconnections~~*
+* *~~Add Ping Button and Style~~*
+* *~~Ping Audience Member~~*
 
 Asking Questions
 ----------------
