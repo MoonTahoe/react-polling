@@ -80,6 +80,22 @@ Deliver
 
 Enhance
 -------
+* Bug : Answer Question
+	a. Connect speaker and 3 audience
+	b. Ask a question
+	c. Answer all three
+	d. Refresh One
+	e. The question gets asked for the other two
+* Speaker Leaving in middle of question
+	a. should return all screens to welcome
+* Speaker Refreshing in the middle of a question
+    a. should return all screens back to current question
+* Member refreshing unanswered question
+	a. should show question
+* Member refreshing answered question
+	a. should show answer
+* server restarting mid question
+	a. Should return All screens to current question state    
 * Each Component listens for specific sockets
 * Add Prop Type validation to views
 * Use Mixins to reduce redundancy
@@ -89,5 +105,5 @@ Enhance
 * When all questions are answered grey out speaker question
 * Save Question Data Results and get back to it
 * Add Pie Chart Scoreboard Route
-* Unit Testing
-* Cucumber Testing
+* Unit Testing : Each View, Server Sockets, Server
+* Cucumber Testing : Acceptance Testing
