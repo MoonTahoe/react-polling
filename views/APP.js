@@ -19,6 +19,8 @@ var APP = React.createClass({
                 name: '',
                 id: ''
             },
+            questions: [],
+            currentQuestion: null,
             connected: false
         };
     },
@@ -31,6 +33,8 @@ var APP = React.createClass({
         this.socket.on('audience', this.audienceUpdate);
         this.socket.on('presentation:start', this.start);
         this.socket.on('presentation:end', this.end);
+        this.socket.on('questions', this.questions);
+        this.socket.on('ask:question', this.ask);
         this.socket.on('member:joined', this.joined);
         this.socket.on('ping', this.ping);
     },
@@ -40,7 +44,7 @@ var APP = React.createClass({
     },
 
     connect() {
-        this.setState({ connected: true });
+        this.setState({connected: true});
         var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
         if (member && member.type === 'audience') {
             this.emit('audience:join', member);
@@ -55,11 +59,11 @@ var APP = React.createClass({
 
     joined(data) {
         sessionStorage.member = JSON.stringify(data);
-        this.setState({ member: data });
+        this.setState({member: data});
     },
 
     start(speaker) {
-        this.setState({ speaker: speaker });
+        this.setState({speaker: speaker});
     },
 
     ping() {
@@ -68,19 +72,27 @@ var APP = React.createClass({
         $('body').removeClass('ping');
     },
 
+    ask(question) {
+        this.setState({currentQuestion: question});
+    },
+
     end(speaker) {
-        this.setState({ speaker: speaker });
+        this.setState({speaker: speaker});
+    },
+
+    questions(questions) {
+        this.setState({questions: questions});
     },
 
     audienceUpdate(audience) {
-        this.setState({ audience: audience });
+        this.setState({audience: audience});
     },
 
     disconnect() {
-        this.setState({ connected: false, title: 'disconnected' });
+        this.setState({connected: false, title: 'disconnected'});
         this.setState({
             audience: [],
-            speaker: { title: 'Disconnected' },
+            speaker: {title: 'Disconnected'},
             member: {
                 name: '',
                 id: ''

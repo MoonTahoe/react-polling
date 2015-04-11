@@ -50,19 +50,19 @@ Attendance and Pinging
 
 Asking Questions
 ----------------
-* Incorporate Question JSON (Array, not hash)
-* Add Question Selection Component
-* Ask Question
-* Questions show on student screens
+* *~~Incorporate Question JSON (Array, not hash)~~*
+* *~~Add Question Selection Component~~*
+* *~~Ask Question~~*
+* *~~Questions show on student screens~~*
 
 Answering Questions
 --------------------
-* emit student answer
-* navigate back to welcome screen
-    * Display audience answers 0/6, 10/10, etc...
+* *~~emit student answer~~*
+* *~~navigate back to welcome screen~~*
 
 Graphing Results
 -----------------
+* Display audience answers 0/6, 10/10, etc...
 * select auto d3 bar graph chart components
 * Bar Graph Sample Data Set
 * Add Bar Graph Socket and change data
@@ -80,9 +80,14 @@ Deliver
 
 Enhance
 -------
+* Each Component listens for specific sockets
+* Add Prop Type validation to views
+* Use Mixins to reduce redundancy
 * Deal with Auto-rejoin Join form flicker (Fade-In)
 * Better Bootstrap those components
 * Display audience count component on speaker question
 * When all questions are answered grey out speaker question
 * Save Question Data Results and get back to it
 * Add Pie Chart Scoreboard Route
+* Unit Testing
+* Cucumber Testing

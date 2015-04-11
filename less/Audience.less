@@ -13,6 +13,38 @@ form {
 
 }
 
+div.choose {
+
+  .make-row();
+
+  button {
+    .btn-lg;
+
+    .make-xs-column(12);
+    .make-sm-column(6);
+    .make-md-column(6);
+    .make-lg-column(6);
+
+    &:nth-child(1) {
+      .btn-success;
+    }
+
+    &:nth-child(2) {
+      .btn-info;
+    }
+
+    &:nth-child(3) {
+      .btn-warning;
+    }
+
+    &:nth-child(4) {
+      .btn-primary;
+    }
+
+  }
+
+}
+
 form.fadeIn {
   opacity: 1;
 }

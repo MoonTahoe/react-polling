@@ -8,6 +8,8 @@ var state = {
         id: '',
         title: 'Presentation'
     },
+    questions: require('./app-questions'),
+    answers: [],
     connections: []
 };
 
@@ -58,24 +60,32 @@ module.exports = function (io) {
             }
         });
 
+        socket.on('ask:question', function (question) {
+            state.answers.push({ q: question.q });
+            this.server.sockets.emit('ask:question', question);
+            console.log(colors.bgBlue(colors.yellow('Ask: ' + question.q)));
+        });
+
+        socket.on('answer:question', function (payload) {
+            var member = getMemberBySocketId(this.id);
+            if (member) {
+                console.log(colors.bgYellow(colors.blue('Answer ' + member.name + ': (' + payload.choice + ') ' + payload.question[payload.choice] )));
+            }
+        });
+
         socket.on('speaker:join', function (payload) {
             state.speaker.name = payload.name;
             state.speaker.id = socket.id;
             state.speaker.title = payload.title;
             this.emit('member:joined', {type: 'speaker', name: payload.name, title: payload.title});
-
-            //
-            //  TODO: Setup Questions
-            //
-
-            //this.emit('questions', questions);
+            this.emit('questions', state.questions);
             this.server.sockets.emit('presentation:start', state.speaker);
             console.log(colors.magenta("Presentation Started: " + payload.title + " by " + payload.name));
         });
 
         socket.on('audience:join', function (payload) {
             state.audience.push({name: payload.name, id: socket.id});
-            this.emit("member:joined", {type: 'audience', name: payload.name, id: socket.id });
+            this.emit("member:joined", {type: 'audience', name: payload.name, id: socket.id});
             this.server.sockets.emit('audience', state.audience);
             console.log(colors.yellow('Audience Joined: ' + payload.name + ' (' + state.audience.length + ')'));
         });
