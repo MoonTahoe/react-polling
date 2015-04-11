@@ -62,15 +62,20 @@ Answering Questions
 
 Graphing Results
 -----------------
-* Display audience answers 0/6, 10/10, etc...
+* Create Scoreboard Component
+* Display No Question State
+* Display Current Question
+* Listen for answers display x out of y x/y
 * select auto d3 bar graph chart components
 * Bar Graph Sample Data Set
 * Add Bar Graph Socket and change data
-* Add Student Count Component
 
 Deliver
 -------
+* Setup basic test framework for future testing
 * Publish Repository
+* Move Enhancements to Issues
+* Generate Readme.md Documentation
 * Setup Heroku App
 * Setup Travis for deployment
 * Deploy Application

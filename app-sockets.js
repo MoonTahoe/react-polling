@@ -1,4 +1,5 @@
 var colors = require('colors/safe');
+var extend = require('util-extend');
 var $ = require('jquery');
 
 var state = {
@@ -8,9 +9,16 @@ var state = {
         id: '',
         title: 'Presentation'
     },
+    currentQuestion: false,
+    currentAnswers: {
+        "a": 0,
+        "b": 0,
+        "c": 0,
+        "d": 0
+    },
     questions: require('./app-questions'),
-    answers: [],
-    connections: []
+    connections: [],
+    scoreboard: null
 };
 
 function getMemberBySocketId(id) {
@@ -25,11 +33,22 @@ function getSocketById(id) {
     })[0];
 }
 
+function resetAnswers() {
+    Object.keys(state.currentAnswers).forEach(function (option) {
+        state.currentAnswers[option] = 0;
+    });
+}
+
 module.exports = function (io) {
 
     io.sockets.on('connection', function (socket) {
 
+        var clientState = extend({}, state);
+        delete clientState.connections;
+        delete clientState.scoreboard;
+
         socket.once('disconnect', function () {
+            var member = getMemberBySocketId(socket.id);
             if (socket.id === state.speaker.id) {
                 console.log(colors.magenta("Presentation Ended: " + state.speaker.title + " by " + state.speaker.name));
                 state.speaker = {
@@ -38,17 +57,21 @@ module.exports = function (io) {
                     title: 'Presentation'
                 };
                 socket.server.sockets.emit("presentation:end", state.speaker);
-            } else {
-                var member = getMemberBySocketId(socket.id);
+            } else if (member) {
                 state.audience.splice(state.audience.indexOf(member), 1);
-                if (member) {
-                    socket.server.sockets.emit("audience", state.audience);
-                    console.log(colors.yellow("Left: " + member.name + " remaining. (" + state.audience.length + ") "));
-                }
+                socket.server.sockets.emit("audience", state.audience);
+                console.log(colors.yellow("Left: " + member.name + " remaining. (" + state.audience.length + ") "));
+            } else {
+                console.log(colors.grey("Scoreboard Socket Disconnected"));
             }
             state.connections.splice(state.connections.indexOf(socket), 1);
             console.log(colors.red("Disconnected: " + state.connections.length + " remaining. (" + socket.id + ") "));
             socket.disconnect();
+        });
+
+        socket.on('scoreboard:connected', function () {
+            state.scoreboard = this;
+            console.log(colors.grey("Scoreboard Socket Connected"));
         });
 
         socket.on('ping', function (id) {
@@ -61,7 +84,8 @@ module.exports = function (io) {
         });
 
         socket.on('ask:question', function (question) {
-            state.answers.push({ q: question.q });
+            state.currentQuestion = question;
+            resetAnswers();
             this.server.sockets.emit('ask:question', question);
             console.log(colors.bgBlue(colors.yellow('Ask: ' + question.q)));
         });
@@ -69,7 +93,18 @@ module.exports = function (io) {
         socket.on('answer:question', function (payload) {
             var member = getMemberBySocketId(this.id);
             if (member) {
-                console.log(colors.bgYellow(colors.blue('Answer ' + member.name + ': (' + payload.choice + ') ' + payload.question[payload.choice] )));
+
+                switch (payload.choice) {
+                    case "a" : state.currentAnswers.a++; break;
+                    case "b" : state.currentAnswers.b++; break;
+                    case "c" : state.currentAnswers.c++; break;
+                    case "d" : state.currentAnswers.d++; break;
+                }
+
+                if (state.scoreboard) {
+                    state.scoreboard.emit('question:answered', state.currentAnswers);
+                }
+                console.log(colors.bgYellow(colors.blue('Answer ' + member.name + ': (' + payload.choice + ') ' + payload.question[payload.choice])));
             }
         });
 
@@ -91,7 +126,7 @@ module.exports = function (io) {
         });
 
         state.connections.push(socket);
-        socket.emit('serverState', {audience: state.audience, speaker: state.speaker});
+        socket.emit('serverState', clientState);
         console.log(colors.green("Connected: " + state.connections.length + " sockets connected. (" + socket.id + ")"));
 
     });

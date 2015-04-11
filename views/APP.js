@@ -20,7 +20,13 @@ var APP = React.createClass({
                 id: ''
             },
             questions: [],
-            currentQuestion: null,
+            currentQuestion: false,
+            currentAnswers: {
+                "a": 0,
+                "b": 0,
+                "c": 0,
+                "d": 0
+            },
             connected: false
         };
     },
@@ -37,6 +43,7 @@ var APP = React.createClass({
         this.socket.on('ask:question', this.ask);
         this.socket.on('member:joined', this.joined);
         this.socket.on('ping', this.ping);
+        this.socket.on('question:answered', this.answered);
     },
 
     emit(event, payload) {
@@ -74,6 +81,10 @@ var APP = React.createClass({
 
     ask(question) {
         this.setState({currentQuestion: question});
+    },
+
+    answered(answers) {
+        this.setState({currentAnswers: answers});
     },
 
     end(speaker) {
