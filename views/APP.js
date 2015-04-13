@@ -6,7 +6,6 @@ var Header = require('./Header');
 var io = require('socket.io-client');
 
 var APP = React.createClass({
-
     getInitialState() {
         return {
             audience: [],
@@ -27,29 +26,27 @@ var APP = React.createClass({
                 "c": 0,
                 "d": 0
             },
+            membersAnswered: [],
             connected: false
         };
     },
-
     componentWillMount() {
         this.socket = io('http://localhost:3000');
         this.socket.on('connect', this.connect);
         this.socket.on('disconnect', this.disconnect);
-        this.socket.on('serverState', this.serverState);
-        this.socket.on('audience', this.audienceUpdate);
-        this.socket.on('presentation:start', this.start);
-        this.socket.on('presentation:end', this.end);
-        this.socket.on('questions', this.questions);
-        this.socket.on('ask:question', this.ask);
         this.socket.on('member:joined', this.joined);
         this.socket.on('ping', this.ping);
-        this.socket.on('question:answered', this.answered);
+        this.socket.on('serverState', x => this.setState(x));
+        this.socket.on('audience', x => this.setState({audience: x}));
+        this.socket.on('presentation:start', x => this.setState({speaker: x}));
+        this.socket.on('presentation:end', x => this.setState({speaker: x}));
+        this.socket.on('questions', x => this.setState({questions: x}));
+        this.socket.on('ask:question', x =>  this.setState({membersAnswered: [], currentQuestion: x, currentAnswers: { "a": 0, "b": 0, "c": 0, "d": 0}}));
+        this.socket.on('question:answered', x => this.setState(x));
     },
-
     emit(event, payload) {
         this.socket.emit(event, payload);
     },
-
     connect() {
         this.setState({connected: true});
         var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
@@ -57,51 +54,23 @@ var APP = React.createClass({
             this.emit('audience:join', member);
         } else if (member && member.type === 'speaker') {
             this.emit('speaker:join', member);
+        } else {
+            this.emit('scoreboard:connected');
         }
     },
-
-    serverState(state) {
-        this.setState(state);
-    },
-
     joined(data) {
         sessionStorage.member = JSON.stringify(data);
         this.setState({member: data});
     },
-
-    start(speaker) {
-        this.setState({speaker: speaker});
-    },
-
     ping() {
         $('body').addClass('ping');
         alert("Hey, " + this.state.member.name + " PAY ATTENTION!!");
         $('body').removeClass('ping');
     },
-
-    ask(question) {
-        this.setState({currentQuestion: question});
-    },
-
-    answered(answers) {
-        this.setState({currentAnswers: answers});
-    },
-
-    end(speaker) {
-        this.setState({speaker: speaker});
-    },
-
-    questions(questions) {
-        this.setState({questions: questions});
-    },
-
-    audienceUpdate(audience) {
-        this.setState({audience: audience});
-    },
-
     disconnect() {
-        this.setState({connected: false, title: 'disconnected'});
         this.setState({
+            connected: false,
+            title: 'disconnected',
             audience: [],
             speaker: {title: 'Disconnected'},
             member: {
@@ -110,7 +79,6 @@ var APP = React.createClass({
             }
         });
     },
-
     render() {
         return <div>
             <Header {...this.state} />

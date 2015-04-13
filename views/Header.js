@@ -1,19 +1,8 @@
 var React = require('react');
-
 var Header = React.createClass({
-
-    showSpeaker() {
-        return (this.props.speaker.name) ? { display: 'block' } : { display: 'none' };
-    },
-
-    showMember() {
-        return (this.props.member.name) ? { display: 'block' } : { display: 'none' };
-    },
-
-    cnxStatus() {
-        return (this.props.connected) ? "connected" : "disconnected";
-    },
-
+    showSpeaker() { return (this.props.speaker.name) ? { display: 'block' } : { display: 'none' }; },
+    showMember() { return (this.props.member.name) ? { display: 'block' } : { display: 'none' }; },
+    cnxStatus() { return (this.props.connected) ? "connected" : "disconnected"; },
     render: function() {
         return <header>
             <div>
@@ -28,8 +17,6 @@ var Header = React.createClass({
                 <span className={this.cnxStatus()}></span>
             </div>
         </header>
-
     }
 });
-
 module.exports = Header;

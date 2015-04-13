@@ -16,6 +16,7 @@ var state = {
         "c": 0,
         "d": 0
     },
+    membersAnswered: [],
     questions: require('./app-questions'),
     connections: [],
     scoreboard: null
@@ -34,6 +35,7 @@ function getSocketById(id) {
 }
 
 function resetAnswers() {
+    state.membersAnswered = [];
     Object.keys(state.currentAnswers).forEach(function (option) {
         state.currentAnswers[option] = 0;
     });
@@ -93,17 +95,14 @@ module.exports = function (io) {
         socket.on('answer:question', function (payload) {
             var member = getMemberBySocketId(this.id);
             if (member) {
-
                 switch (payload.choice) {
                     case "a" : state.currentAnswers.a++; break;
                     case "b" : state.currentAnswers.b++; break;
                     case "c" : state.currentAnswers.c++; break;
                     case "d" : state.currentAnswers.d++; break;
                 }
-
-                if (state.scoreboard) {
-                    state.scoreboard.emit('question:answered', state.currentAnswers);
-                }
+                state.membersAnswered.push(member.name);
+                this.server.sockets.emit('question:answered', { currentAnswers: state.currentAnswers, membersAnswered: state.membersAnswered });
                 console.log(colors.bgYellow(colors.blue('Answer ' + member.name + ': (' + payload.choice + ') ' + payload.question[payload.choice])));
             }
         });

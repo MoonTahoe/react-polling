@@ -1,12 +1,10 @@
 var React = require('react');
-var Display = require('./Display');
+var Display = require('../Display');
 
 var Attendance = React.createClass({
-
     ping(id) {
       this.props.emit('ping', id);
     },
-
     addMemberRow(member, i) {
         return <tr key={i}>
             <td><button onClick={this.ping.bind(null, member.id)}>Ping</button></td>
@@ -14,11 +12,9 @@ var Attendance = React.createClass({
             <td>{member.id}</td>
         </tr>
     },
-
     render() {
         return <div>
             <h2>Attendance</h2>
-
             <Display if={this.props.audience.length}>
                 <table>
                     <thead>
@@ -33,11 +29,9 @@ var Attendance = React.createClass({
                     </tbody>
                 </table>
             </Display>
-
             <Display if={!this.props.audience.length}>
                 <span class="message">Awaiting Audience...</span>
             </Display>
-
         </div>
     }
 });

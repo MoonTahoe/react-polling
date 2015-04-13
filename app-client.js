@@ -2,9 +2,9 @@ var React = require('react');
 var Router = require('react-router');
 var { Route, DefaultRoute } = Router;
 var APP = require('./views/APP');
-var Audience = require('./views/Audience');
-var Speaker = require('./views/Speaker');
-var Scoreboard = require('./views/Scoreboard');
+var Audience = require('./views/Audience/Audience');
+var Speaker = require('./views/Speaker/Speaker');
+var Scoreboard = require('./views/Scoreboard/Scoreboard');
 
 var routes = (
     <Route handler={APP}>
