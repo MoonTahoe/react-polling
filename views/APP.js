@@ -31,7 +31,7 @@ var APP = React.createClass({
         };
     },
     componentWillMount() {
-        this.socket = io('/');
+        this.socket = io(window.location.replace('#/',''));  //http://localhost:3000, but root on heroku
         this.socket.on('connect', this.connect);
         this.socket.on('disconnect', this.disconnect);
         this.socket.on('member:joined', this.joined);
@@ -48,13 +48,15 @@ var APP = React.createClass({
         this.socket.emit(event, payload);
     },
     connect() {
+        alert(window.location.href.indexOf('/scoreboard'));
         this.setState({connected: true});
         var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
         if (member && member.type === 'audience') {
             this.emit('audience:join', member);
         } else if (member && member.type === 'speaker') {
             this.emit('speaker:join', member);
-        } else {
+        } else if (window.location.href.indexOf('/scoreboard') !== -1) {
+            alert(window.location);
             this.emit('scoreboard:connected');
         }
     },
