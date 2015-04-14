@@ -39,7 +39,7 @@ var APP = React.createClass({
         this.socket.on('serverState', x => this.setState(x));
         this.socket.on('audience', x => this.setState({audience: x}));
         this.socket.on('presentation:start', x => this.setState({speaker: x}));
-        this.socket.on('presentation:end', x => this.setState({speaker: x, currentQuestion: false, currentAnswers: { "a": 0, "b": 0, "c": 0,"d": 0}}));
+        this.socket.on('presentation:end', x => this.setState(x));
         this.socket.on('questions', x => this.setState({questions: x}));
         this.socket.on('ask:question', x =>  this.setState({membersAnswered: [], currentQuestion: x, currentAnswers: { "a": 0, "b": 0, "c": 0, "d": 0}}));
         this.socket.on('question:answered', x => this.setState(x));
@@ -70,7 +70,6 @@ var APP = React.createClass({
     disconnect() {
         this.setState({
             connected: false,
-            title: 'disconnected',
             audience: [],
             speaker: {title: 'Disconnected'},
             member: {

@@ -52,6 +52,11 @@ module.exports = function (io) {
         socket.once('disconnect', function () {
             var member = getMemberBySocketId(socket.id);
             if (socket.id === state.speaker.id) {
+
+                //
+                // TODO: Refactor this mess...
+                //
+
                 console.log(colors.magenta("Presentation Ended: " + state.speaker.title + " by " + state.speaker.name));
                 state.speaker = {
                     name: '',
@@ -66,7 +71,25 @@ module.exports = function (io) {
                     },
                     membersAnswered: []
                 };
-                socket.server.sockets.emit("presentation:end", state.speaker);
+                state.currentQuestion = false;
+                state.currentAnswers = {
+                    "a": 0,
+                    "b": 0,
+                    "c": 0,
+                    "d": 0
+                };
+                state.membersAnswered = [];
+                socket.server.sockets.emit("presentation:end", {
+                    speaker: state.speaker,
+                    currentQuestion: false,
+                    currentAnswers: {
+                        "a": 0,
+                        "b": 0,
+                        "c": 0,
+                        "d": 0
+                    },
+                    membersAnswered: []
+                });
             } else if (member) {
                 state.audience.splice(state.audience.indexOf(member), 1);
                 socket.server.sockets.emit("audience", state.audience);
@@ -104,13 +127,24 @@ module.exports = function (io) {
             var member = getMemberBySocketId(this.id);
             if (member) {
                 switch (payload.choice) {
-                    case "a" : state.currentAnswers.a++; break;
-                    case "b" : state.currentAnswers.b++; break;
-                    case "c" : state.currentAnswers.c++; break;
-                    case "d" : state.currentAnswers.d++; break;
+                    case "a" :
+                        state.currentAnswers.a++;
+                        break;
+                    case "b" :
+                        state.currentAnswers.b++;
+                        break;
+                    case "c" :
+                        state.currentAnswers.c++;
+                        break;
+                    case "d" :
+                        state.currentAnswers.d++;
+                        break;
                 }
                 state.membersAnswered.push(member.name);
-                this.server.sockets.emit('question:answered', { currentAnswers: state.currentAnswers, membersAnswered: state.membersAnswered });
+                this.server.sockets.emit('question:answered', {
+                    currentAnswers: state.currentAnswers,
+                    membersAnswered: state.membersAnswered
+                });
                 console.log(colors.bgYellow(colors.blue('Answer ' + member.name + ': (' + payload.choice + ') ' + payload.question[payload.choice])));
             }
         });
