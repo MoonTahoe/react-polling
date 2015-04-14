@@ -20,6 +20,8 @@
   ],
   "author": "Alex Banks <alex@moonhighway.com> (http://www.moonhighway.com)",
   "license": "MIT",
+  "repository": "https://github.com/MoonTahoe/react-polling",
+  "homepage": "react-polling.herokuapp.com",
   "dependencies": {
     "bootstrap": "^3.3.4",
     "colors": "^1.0.3",
