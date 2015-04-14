@@ -56,7 +56,15 @@ module.exports = function (io) {
                 state.speaker = {
                     name: '',
                     id: '',
-                    title: 'Presentation'
+                    title: 'Presentation',
+                    currentQuestion: false,
+                    currentAnswers: {
+                        "a": 0,
+                        "b": 0,
+                        "c": 0,
+                        "d": 0
+                    },
+                    membersAnswered: []
                 };
                 socket.server.sockets.emit("presentation:end", state.speaker);
             } else if (member) {
