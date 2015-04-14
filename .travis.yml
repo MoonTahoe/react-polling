@@ -1,10 +1,16 @@
 language: node_js
-
 node_js:
 - '0.12'
 - '0.11'
 - '0.10'
-
+env:
+  global:
+  - NODE_ENV=production
 before_script:
   - npm install -g grunt-cli
   - npm install -g mocha
+deploy:
+  provider: heroku
+  api_key:
+    secure: R/5CkjXxliUtz2/RqBa1mk2VTqU+z1QRksZF0NXn8OcMt4Olbsa/u7o61LJtB6ve6h4LBnuinJ1CtQUstPFwb3667FoT7po94VNTZoan2ANG2a6In8ZNgd2ZIHctSk0sayVw4SZ1iiiSsseKAV0NpbGfqE7W39/3QtFeH9u6kBk=
+  app: react-polling
