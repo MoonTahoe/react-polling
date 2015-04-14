@@ -48,7 +48,6 @@ var APP = React.createClass({
         this.socket.emit(event, payload);
     },
     connect() {
-        alert(window.location.href.indexOf('/scoreboard'));
         this.setState({connected: true});
         var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
         if (member && member.type === 'audience') {
